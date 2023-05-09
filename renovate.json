@@ -4,6 +4,7 @@
     "fileMatch": ["\\.yaml$"]
   },
   "flux": {
-    "fileMatch": ["apps\/flux-config\/base\/.+.yaml$"]
+    "fileMatch": ["(^|/)flux-system/(?:.+/)?gotk-components\\.yaml$",
+                  "(^|/)flux-system/(?:.+/)?image-automation-components\\.yaml$"]
   }
 }

@@ -1,0 +1,9 @@
+{
+  "extends": ["config:base","docker:disable", ":disableRateLimiting"],
+  "kubernetes": {
+    "fileMatch": ["\\.yaml$"]
+  },
+  "flux": {
+    "fileMatch": ["apps\/flux-config\/base\/.+.yaml$"]
+  }
+}

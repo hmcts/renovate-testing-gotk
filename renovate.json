@@ -1,6 +1,7 @@
 {
   "extends": ["config:base","docker:disable", ":disableRateLimiting"],
   "flux": {
-    "fileMatch": ["\\.yaml$"]
+    "fileMatch": ["\\.yaml$",
+                  "apps\/flux-config\/base\/ptl-gotk-components.yaml$"]
   }
 }

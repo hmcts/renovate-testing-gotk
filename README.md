@@ -1,40 +1,27 @@
-# cnp-flux-config
-Flux v2 config for CFT AKS clusters
+# Minimal Reproduction of Renovate FluxCD/Fluxv2 Manager
 
-## Repo Structure
+This is a minimal reproduction repo for the issues seen and raised [here](https://github.com/renovatebot/renovate/discussions/22073)
 
-Please see [Repo setup](docs/repo-setup.md) for details on how this repo is organized and meant to work.
+## Current Behaviour
 
-## Adding an app to flux
+renovate.json fileMatch has been extended with the following regex to match all YAML files as per the [docs](https://docs.renovatebot.com/modules/manager/flux/#non-configured-filematch): 
+````
+"\\.yaml$"
+````
 
-- All App deployments are managed through `HelmRelease` manifests.
-- Any new/existing application that is getting added to an environment for the first time should use [Flux v2](docs/app-deployment-v2.md).
-
-## Encrypting Secrets With Sops
-
- [Sops setup](docs/secrets-sops-encryption.md)
-
-### SOPs
-
-Sops fails linting by default as we require 2 spaces while it uses 4 spaces.
-You can use `yq` to fix this:
-
-```
-yq eval -I 2 --inplace apps/mi/mi-adf-shir/sbox/mi-adf-auth-values.enc.yaml
-```
-
-upstream issue: https://github.com/mozilla/sops/issues/900
-
-## Rebooting nodes with kured
-
-[Documentation](docs/reboot-node-using-kured.md)
-
-## Upgrading flux v2
-
-Update `flux` cli in your local and run 
- ```bash
+Two gotk-components.yaml files have been created using the following command:
+````
 flux install --export > apps/flux-system/base/gotk-components.yaml
-flux install --export --components image-reflector-controller,image-automation-controller > apps/flux-system/base/image-automation-components.yaml 
-```
+flux install --export > apps/flux-system/base/gotk-components2.yaml
+````
 
-Currently, `image-automation-components.yaml` will contain some duplication like `namespace` , `clusterrole` and `NetworkPolicy` and they need to be removed manually
+Renovate Debug Logs shows match for both files by flux manager however after dependency extraction the flux manager fileCount & depCount are both listed as 1. 
+
+Only gotk-components.yaml is shown on the dependency dashboard.
+
+gotk-components2.yaml does not recieve dependency updates but gotk-components.yaml does despite the files having identical contents. This can be seen in the open PRs
+
+
+## Expected Behaviour
+
+Both gotk-components.yaml & gotk-compoents2.yaml should be included in dependency dashboard and recieve the same dependency updates.
